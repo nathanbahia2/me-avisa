@@ -1,0 +1,46 @@
+{% load static %}
+{% load bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+    <style>
+        .container {
+            height:100vh
+        }
+
+        form {
+            width: 340px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center">
+        <form method="post" class="card p-3">
+            {% csrf_token %}
+            <div class="mb-4 text-center">
+                <h1>Acessar sistema</h1>
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.email }}
+                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+            </div>
+            <div class="form-floating">
+                {{ form.password }}
+                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+            </div>
+            <div class="mt-3">
+                <button class="btn btn-lg btn-primary w-100">Entrar</button>
+            </div>
+            <div class="my-3">
+                <a href="#" class="btn btn-lg btn-secondary w-100">Cadastre-se</a>
+            </div>
+        </form>
+    </div>
+{% bootstrap_javascript %}
+</body>
+</html>

@@ -139,9 +139,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # AUTENTICAÇÃO
 AUTH_USER_MODEL = 'users.Usuario'
+LOGIN_URL = '/auth/login',
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/auth/login'
 
 
-# CELERY
 # CELERY
 REDIS_URL = config('REDIS_URL')
 CACHE_BACKEND = 'default'
