@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 
 from apps.core.forms import ProdutoForm
 from apps.core.models import Produto
-from apps.core.utils.scrapping import Lojas
+from apps.core.utils.scraping import Lojas
 
 
 @login_required

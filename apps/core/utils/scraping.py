@@ -16,23 +16,35 @@ class Lojas:
         if response:
             return BeautifulSoup(response, 'html.parser')
 
+    def __dispacher(self):
+        if 'mercadolivre' in self.produto.url:
+            return MercadoLivre
+
     def data(self):
-        soup = self.__soup()
-        if soup:
-            return MercadoLivre(soup).data()
+        try:
+            soup = self.__soup()
+            loja = self.__dispacher()
+            if soup:
+                return loja(soup).data()
+
+        except:
+            return {
+                'nome': None,
+                'preco': None,
+                'imagem': None
+            }
 
 
 class MercadoLivre:
-    def __init__(self, soup):
+    def __init__(self, soup: BeautifulSoup) -> dict:
         self.soup = soup
 
     def data(self):
-        produto = self.soup.find("h1").text
+        nome = self.soup.find("h1").text
         preco = self.soup.find('span', {'class': ['price-tag', 'ui-pdp-price__part']}).text.split('R$')[1]
         imagem = self.soup.find("img", {'class': "ui-pdp-image ui-pdp-gallery__figure__image"}).attrs['src']
-
         return {
-            'nome': produto,
+            'nome': nome,
             'preco': preco,
-            'imagem': imagem,
+            'imagem': imagem
         }
