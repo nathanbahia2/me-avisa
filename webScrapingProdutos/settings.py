@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'bootstrap5',
+    'django_celery_beat',
 
     'apps.core.apps.CoreConfig',
     'apps.users.apps.UsersConfig',
@@ -82,16 +83,17 @@ WSGI_APPLICATION = 'webScrapingProdutos.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+#
+# if DEBUG is False:
+#     DATABASES['default'] = dj_database_url.parse(config('DATABASE_URL'))
 
-if DEBUG is False:
-    DATABASES['default'] = dj_database_url.parse(config('DATABASE_URL'))
-
+DATABASES = {'default': dj_database_url.parse(config('DATABASE_URL'))}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -137,3 +139,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # AUTENTICAÇÃO
 AUTH_USER_MODEL = 'users.Usuario'
+
+
+# CELERY
+# CELERY
+REDIS_URL = config('REDIS_URL')
+CACHE_BACKEND = 'default'
+TIMEZONE = 'America/Sao_Paulo'
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+RESULT_BACKEND = config('CELERY_RESULT_BACKEND')
+ACCEPT_CONTENT = ['application/json']
+TASK_SERIALIZER = 'json'
+RESULT_SERIALIZER = 'json'
+TASK_IGNORE_RESULT = False
+BROKER_USE_SSL = True
