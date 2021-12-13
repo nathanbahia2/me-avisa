@@ -1,0 +1,26 @@
+<div class="col-12 col-sm-6 col-md-3 p-2">
+    <div class="h-100 p-3 shadow">
+        <div class="text-center">
+            <img src="{{ produto.imagem }}" alt="{{ produto.nome }}" style="height: 200px; width: auto; margin: auto">
+        </div>
+
+        <div class="card-body">
+            <h5 class="card-title">{{ produto.nome|truncatechars:30 }}</h5>
+            <b>R$ {{ produto.preco }}</b><br>
+
+            <div class="text-center">
+                <a class="small text-primary fw-bold text-decoration-none" target="_blank" href="{{ produto.url }}"><i class="fas fa-link"></i> Link</a>
+            </div>
+
+            <p class="text-muted small">
+                <b>Cadastro: </b>{{ produto.data|date:'d M Y'}}<br>
+                <b>Última consulta: </b>{{ produto.ultima_consulta|date:'d M Y'}}
+            </p>
+
+            <div class="btn-group btn-group-sm w-100">
+                <a href="#" class="btn btn-outline-danger">Excluir</a>
+                <a href="#" class="btn btn-outline-secondary">Visualizar</a>
+            </div>
+        </div>
+    </div>
+</div>
