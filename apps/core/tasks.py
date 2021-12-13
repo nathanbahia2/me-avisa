@@ -8,7 +8,7 @@ logger = get_task_logger(__name__)
 
 
 @app.task(name='atualiza_produtos', queue='produtos')
-def task_atualizar_produtos():
+def task_atualizar_produtos(produto_id=None):
     logger.info("Iniciando atualização de tarefas")
-    atualizar_produtos()
+    atualizar_produtos(produto_id)
     logger.info("Finalizando atualização de tarefas")
