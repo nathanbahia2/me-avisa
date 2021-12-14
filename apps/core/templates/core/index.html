@@ -1,37 +1,9 @@
-{% load static %}
-{% load bootstrap5 %}
+{% extends 'core/base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-    {% bootstrap_css %}
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'core:index' %}">Meus produtos</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Página inicial</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Configurações</a>
-                    </li>
-                </ul>
-                <a href="{% url 'users:logout' %}" class="text-danger fw-bold text-decoration-none h3"><i class="fas fa-sign-out-alt"></i></a>
-            </div>
-        </div>
-    </nav>
 
-    <section class="container text-center my-5 py-5">
+{% block content %}
+    <!-- FORMULÁRIO DE CADASTRO -->
+    <section class="container text-center mt-5 py-5">
         <h1 class="mt-5">Buscar produtos</h1>
         <p>Insira a URL de um produto para monitorar seu preço e receber relatórios diariamente</p>
 
@@ -44,6 +16,41 @@
         </form>
     </section>
 
+    <!-- LOJAS -->
+    <section class="container">
+        <div class="row mx-0">
+            <div class="col-6 col-md-3 p-2">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Mercado Livre</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 p-2">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Amazon</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 p-2">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Casas Bahia</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 p-2">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Americanas</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GRID DE PRODUTOS -->
     <section class="container mt-5">
         <h2>Seus produtos</h2>
         {% if produtos %}
@@ -56,9 +63,42 @@
             <div class="alert alert-warning">Você ainda não cadastrou nenhum produto para ser monitorado</div>
         {% endif %}
     </section>
+{% endblock %}
 
-{% bootstrap_javascript %}
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</body>
-</html>
+{% block script %}
+    <script>
+        $(".btn-excluir").on("click", function () {
+            const idProduto = $(this).data('produto')
+            const card = $(`.cardProduto[data-produto="${ idProduto }"]`)
+            const sweet = Swal.mixin({toast: true, position: 'top-end', showConfirmButton: false, timer: 2000})
+
+            Swal.fire({
+                icon: 'question',
+                title: 'Remover produto?',
+                confirmButtonText: "Excluir",
+                cancelButtonText: "Cancelar",
+                showCancelButton: true,
+                reverseButtons: true
+            }).then(result => {
+                if (result.value) {
+                    $.post({
+                        url:  `/excluir/${idProduto}`,
+                        success: () => {
+                            card.fadeOut()
+                            sweet.fire({
+                                icon: "success",
+                                title: "Produto removido com sucesso"
+                            })
+                        },
+                        error: () => {
+                            sweet.fire({
+                                icon: "error",
+                                title: "Falha ao excluir produto"
+                            })
+                        }
+                    })
+                }
+            })
+        })
+    </script>
+{% endblock %}

@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 
 from apps.core.forms import ProdutoForm
 from apps.core.models import Produto
@@ -32,3 +34,31 @@ def index(request):
         'produtos': produtos
     }
     return render(request, 'core/index.html', context)
+
+
+@login_required
+def detalhes(request, pk):
+    produto = get_object_or_404(
+        Produto,
+        pk=pk,
+        usuario=request.user,
+        ativo=True
+    )
+
+    context = {
+        'produto': produto
+    }
+    return render(request, 'core/detalhes.html', context)
+
+
+@login_required
+@require_POST
+def excluir(request, pk):
+    produto = get_object_or_404(
+        Produto,
+        pk=pk,
+        usuario=request.user,
+        ativo=True
+    )
+    produto.delete()
+    return JsonResponse(True, safe=False)
